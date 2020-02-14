@@ -1,22 +1,9 @@
 const fs = require('fs');
 const http = require('http');
 const url = require('url');
+const replaceTemplate = require('./modules/replaceTemplate');
 
 //Server
-const replaceTemplate = (template, item) => {
-    let output = template.replace(/{%PRODUCTNAME%}/g, item.productName);  
-    output = output.replace(/{%IMAGE%}/g, item.image);
-    output = output.replace(/{%PRICE%}/g, item.price); 
-    output = output.replace(/{%FROM%}/g, item.from); 
-    output = output.replace(/{%NUTRIENTS%}/g, item.nutrients); 
-    output = output.replace(/{%QUANTITY%}/g, item.quantity); 
-    output = output.replace(/{%DESCRIPTION%}/g, item.description);
-    output = output.replace(/{%ID%}/g, item.id);
-    
-    if(!item.organic) output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic');
-    return output;
-}
-
 const tempOverview =  fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf-8');
 const tempCard =  fs.readFileSync(`${__dirname}/templates/template-card.html`, 'utf-8');
 const tempProduct =  fs.readFileSync(`${__dirname}/templates/template-product.html`, 'utf-8');
@@ -47,10 +34,7 @@ const server = http.createServer((req, res) => {
         
     //Not found
     } else {
-        res.writeHead(404, {
-            'Content-type': 'text/html',
-            'my-heder': 'hello-world'
-        });
+        res.writeHead(404, {'Content-type': 'text/html' });
         res.end('<h1>Page not found!</h1>');
     }
 });
